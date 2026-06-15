@@ -14,11 +14,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.union
@@ -76,7 +78,6 @@ fun OptionsPanel(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .windowInsetsPadding(WindowInsets.displayCutout.union(WindowInsets.systemBars))
                     .heightIn(max = screenHeightDp * 0.55f)
                     .graphicsLayer {
                         shape = cornerShape
@@ -106,6 +107,11 @@ fun OptionsPanel(
                             }
                         )
                     }
+                    .windowInsetsPadding(
+                        WindowInsets.displayCutout
+                            .union(WindowInsets.systemBars)
+                            .only(WindowInsetsSides.Top + WindowInsetsSides.Horizontal)
+                    )
                     .padding(start = 20.dp, end = 20.dp, top = 12.dp, bottom = 20.dp)
                     .verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.CenterHorizontally
