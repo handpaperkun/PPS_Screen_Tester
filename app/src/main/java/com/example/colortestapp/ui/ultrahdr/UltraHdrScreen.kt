@@ -3,6 +3,7 @@ package com.example.colortestapp.ui.ultrahdr
 import android.app.Activity
 import android.content.pm.ActivityInfo
 import android.os.Build
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -27,6 +28,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,6 +42,9 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.colortestapp.model.UltraHdrConfig
 import com.example.colortestapp.ui.common.OptionsPanel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import com.example.colortestapp.ui.theme.ElevatedSurface
 import com.example.colortestapp.ui.theme.Gray400
 import com.example.colortestapp.ui.theme.PurpleAccent
@@ -62,9 +67,10 @@ fun UltraHdrScreen(
     val heightPx = with(density) { configuration.screenHeightDp.dp.toPx().toInt() }
 
     val activity = LocalContext.current as Activity
+    val scope = rememberCoroutineScope()
 
     // 所有灰阶都带 gainmap → 始终 HDR 窗口模式
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
         LaunchedEffect(Unit) {
             activity.window.colorMode = ActivityInfo.COLOR_MODE_HDR
         }
@@ -108,32 +114,24 @@ fun UltraHdrScreen(
                 )
             }
     ) {
-        // 真实 App 流程：保存 Ultra HDR JPEG → ImageDecoder 解码 → ImageView 显示
+        // 官方 Ultra HDR 显示路径: Gainmap Bitmap → ImageView → hardware Canvas 自动应用
         val bitmap = remember(stepIndex, widthPx, heightPx) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-                try {
-                    val bmp = viewModel.generateBitmap(widthPx, heightPx)
-                    val tmp = java.io.File(activity.cacheDir, "ultrahdr_${stepIndex}.jpg")
-                    java.io.FileOutputStream(tmp).use { bmp.compress(android.graphics.Bitmap.CompressFormat.JPEG, 100, it) }
-                    bmp.recycle()
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
-                        android.graphics.ImageDecoder.decodeBitmap(
-                            android.graphics.ImageDecoder.createSource(tmp))
-                    else android.graphics.BitmapFactory.decodeFile(tmp.absolutePath)
-                } catch (_: Exception) { null }
-            } else null
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
+                viewModel.generateBitmap(widthPx, heightPx) else null
         }
         if (bitmap != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             AndroidView(
                 factory = { ctx ->
-                    android.widget.ImageView(ctx).apply { scaleType = android.widget.ImageView.ScaleType.FIT_XY }
+                    android.widget.ImageView(ctx).apply {
+                        scaleType = android.widget.ImageView.ScaleType.FIT_XY
+                        // 强制硬件加速，确保 gainmap 被 Canvas 处理
+                        setLayerType(android.view.View.LAYER_TYPE_HARDWARE, null)
+                    }
                 },
                 update = { (it as android.widget.ImageView).setImageBitmap(bitmap) },
                 modifier = Modifier.fillMaxSize()
             )
         } else {
-            val code = stepDef.sdrCode / 255f
-            Box(modifier = Modifier.fillMaxSize().background(Color(code, code, code)))
         }
 
         // 选项面板
@@ -147,6 +145,31 @@ fun UltraHdrScreen(
                 onSelectStep = { idx ->
                     viewModel.updateConfig(UltraHdrConfig(stepIndex = idx))
                     showOptions = false
+                },
+                onSave = {
+                    scope.launch {
+                        withContext(Dispatchers.IO) {
+                            val file = viewModel.saveStep(widthPx, heightPx)
+                            withContext(Dispatchers.Main) {
+                                if (file != null) {
+                                    Toast.makeText(activity, "已保存 ${file.name}", Toast.LENGTH_SHORT).show()
+                                } else {
+                                    Toast.makeText(activity, "保存失败", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        }
+                    }
+                },
+                onSaveAll = {
+                    scope.launch {
+                        Toast.makeText(activity, "正在保存 21 张...", Toast.LENGTH_SHORT).show()
+                        withContext(Dispatchers.IO) {
+                            val files = viewModel.saveAllSteps(widthPx, heightPx)
+                            withContext(Dispatchers.Main) {
+                                Toast.makeText(activity, "已保存 ${files.size}/21 张到相册", Toast.LENGTH_LONG).show()
+                            }
+                        }
+                    }
                 }
             )
         }
@@ -157,7 +180,9 @@ fun UltraHdrScreen(
 private fun UltraHdrOptionsContent(
     stepDef: StepDef,
     stepCount: Int,
-    onSelectStep: (Int) -> Unit
+    onSelectStep: (Int) -> Unit,
+    onSave: () -> Unit,
+    onSaveAll: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -221,5 +246,27 @@ private fun UltraHdrOptionsContent(
         }
 
         Spacer(modifier = Modifier.height(4.dp))
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Button(
+                onClick = onSave,
+                colors = ButtonDefaults.buttonColors(containerColor = YellowAccent),
+                shape = RoundedCornerShape(10.dp),
+                modifier = Modifier.weight(1f).height(48.dp)
+            ) {
+                Text("保存当前", style = MaterialTheme.typography.labelLarge, color = Color.Black)
+            }
+            Button(
+                onClick = onSaveAll,
+                colors = ButtonDefaults.buttonColors(containerColor = PurpleAccent),
+                shape = RoundedCornerShape(10.dp),
+                modifier = Modifier.weight(1f).height(48.dp)
+            ) {
+                Text("保存全部 21 张", style = MaterialTheme.typography.labelLarge, color = White)
+            }
+        }
     }
 }

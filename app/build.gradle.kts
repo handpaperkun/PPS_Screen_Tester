@@ -21,8 +21,8 @@ android {
         applicationId = "com.example.colortestapp"
         minSdk = 28
         targetSdk = 35
-        versionCode = 3
-        versionName = "1.99"
+        versionCode = 4
+        versionName = "1.991"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
