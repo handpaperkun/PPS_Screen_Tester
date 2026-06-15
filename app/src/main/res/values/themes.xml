@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="Theme.ColorTESTapp" parent="android:Theme.Material.NoActionBar">
         <item name="android:windowBackground">@color/black</item>
         <item name="android:statusBarColor">@color/black</item>
         <item name="android:navigationBarColor">@color/black</item>
         <item name="android:windowLightStatusBar">false</item>
+        <!-- 屏幕测试工具：内容画进刘海/挖孔区，测试图案铺满整屏 -->
+        <item name="android:windowLayoutInDisplayCutoutMode" tools:targetApi="o_mr1">shortEdges</item>
     </style>
 </resources>

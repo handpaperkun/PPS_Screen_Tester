@@ -25,7 +25,8 @@
             android:label="@string/app_name"
             android:theme="@style/Theme.ColorTESTapp"
             android:screenOrientation="portrait"
-            android:keepScreenOn="true">
+            android:keepScreenOn="true"
+            android:windowLayoutInDisplayCutoutMode="shortEdges">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
