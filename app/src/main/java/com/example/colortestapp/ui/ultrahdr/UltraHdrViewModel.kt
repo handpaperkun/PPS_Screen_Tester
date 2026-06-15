@@ -35,7 +35,7 @@ class UltraHdrViewModel : ViewModel() {
 
     /**
      * 生成指定灰阶的 Ultra HDR Bitmap。
-     * 底图: sRGB 编码 (与 JPEG 默认解码 EOTF 一致)。
+     * 底图: sRGB 编码 (JPEG 默认 EOTF)。
      * 增益图: 4x 全白，gamma 1.0 线性。
      */
     @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
