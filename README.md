@@ -84,4 +84,4 @@ OPPO X9Ultra / X9S Pro · 小米 17 Ultra / 17 ProMax · vivo X300Ultra
 ---
 
 ## 许可
-可自由分发使用。
+基于GPL-3.0 license许可证发布
