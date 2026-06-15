@@ -108,14 +108,30 @@ fun UltraHdrScreen(
                 )
             }
     ) {
-        // AH16 (FP16) SurfaceView 渲染, 支持 >1.0 HDR 值
-        val glView = remember { UltraHdrGlView(activity) }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            val code = stepDef.sdrCode / 255f
-            glView.renderR = code; glView.renderG = code; glView.renderB = code
-            AndroidView(factory = { glView }, modifier = Modifier.fillMaxSize())
+        // 真实 App 流程：保存 Ultra HDR JPEG → ImageDecoder 解码 → ImageView 显示
+        val bitmap = remember(stepIndex, widthPx, heightPx) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                try {
+                    val bmp = viewModel.generateBitmap(widthPx, heightPx)
+                    val tmp = java.io.File(activity.cacheDir, "ultrahdr_${stepIndex}.jpg")
+                    java.io.FileOutputStream(tmp).use { bmp.compress(android.graphics.Bitmap.CompressFormat.JPEG, 100, it) }
+                    bmp.recycle()
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
+                        android.graphics.ImageDecoder.decodeBitmap(
+                            android.graphics.ImageDecoder.createSource(tmp))
+                    else android.graphics.BitmapFactory.decodeFile(tmp.absolutePath)
+                } catch (_: Exception) { null }
+            } else null
+        }
+        if (bitmap != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            AndroidView(
+                factory = { ctx ->
+                    android.widget.ImageView(ctx).apply { scaleType = android.widget.ImageView.ScaleType.FIT_XY }
+                },
+                update = { (it as android.widget.ImageView).setImageBitmap(bitmap) },
+                modifier = Modifier.fillMaxSize()
+            )
         } else {
-            // 回退：纯色填充
             val code = stepDef.sdrCode / 255f
             Box(modifier = Modifier.fillMaxSize().background(Color(code, code, code)))
         }
