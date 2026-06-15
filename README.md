@@ -75,7 +75,8 @@
 
 本 APP 大部分工作由 AI 完成：
 
-- **AI**: Claude Opus 4.7/8 · Deepseek V4Pro · Kimi K2.6 et.
+- **AI**: Claude Opus 4.7/8 · Deepseek V4Pro · Kimi K2.6 · GPT5.5 Pro （原Po）
+-         GLM5.2 （linyusenzz）评价为不如，UI避让修出BUG了
 - **辅助体验验证**: [@森森森在哪呢](https://weibo.com/n/森森森在哪呢) [@天天座萝世](https://weibo.com/n/天天座萝世) [@Megaox](https://weibo.com/n/Megaox)
 
 ### 已验证机型
