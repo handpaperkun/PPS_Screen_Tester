@@ -3,7 +3,6 @@ package com.example.colortestapp.ui.ultrahdr
 import android.app.Activity
 import android.content.pm.ActivityInfo
 import android.os.Build
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -26,20 +25,18 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.colortestapp.model.UltraHdrConfig
 import com.example.colortestapp.ui.common.OptionsPanel
@@ -81,13 +78,6 @@ fun UltraHdrScreen(
     // 生成当前灰阶的 Ultra HDR Bitmap
     // 直接用 config.stepIndex 作为 key，确保状态变化时立即重新生成
     val stepIndex = config.stepIndex
-    val bitmap = remember(stepIndex, widthPx, heightPx) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            viewModel.generateBitmap(widthPx, heightPx)
-        } else {
-            null
-        }
-    }
 
     Box(
         modifier = Modifier
@@ -118,16 +108,12 @@ fun UltraHdrScreen(
                 )
             }
     ) {
-        // 全屏显示当前灰阶测试图 — key() 强制滑动时立即刷新
-        if (bitmap != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            key(stepIndex) {
-                Image(
-                    bitmap = bitmap.asImageBitmap(),
-                    contentDescription = "灰阶 ${stepDef.label}",
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.FillBounds
-                )
-            }
+        // AH16 (FP16) SurfaceView 渲染, 支持 >1.0 HDR 值
+        val glView = remember { UltraHdrGlView(activity) }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            val code = stepDef.sdrCode / 255f
+            glView.renderR = code; glView.renderG = code; glView.renderB = code
+            AndroidView(factory = { glView }, modifier = Modifier.fillMaxSize())
         } else {
             // 回退：纯色填充
             val code = stepDef.sdrCode / 255f
