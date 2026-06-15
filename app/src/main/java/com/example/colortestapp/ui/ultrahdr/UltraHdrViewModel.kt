@@ -35,21 +35,17 @@ class UltraHdrViewModel : ViewModel() {
 
     /**
      * 生成指定灰阶的 Ultra HDR Bitmap。
-     * 底图: 纯 gamma 2.2 编码 (非 sRGB piecewise)。
-     * 增益图: 4× 全白，gamma 1.0 线性。
+     * 底图: sRGB 编码 (与 JPEG 默认解码 EOTF 一致)。
+     * 增益图: 4x 全白，gamma 1.0 线性。
      */
     @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
     fun generateBitmap(width: Int, height: Int, code: Int = currentStepDef().sdrCode): Bitmap {
         val boost = 4.0f
-        val linear = code.coerceIn(0, 255) / 255f
-        val g22 = Math.pow(linear.toDouble(), 1.0 / 2.2).toFloat()
-        val pixel = (g22.coerceIn(0f, 1f) * 255f).toInt()
-        val color = android.graphics.Color.rgb(pixel, pixel, pixel)
 
         val base = Bitmap.createBitmap(
             width.coerceAtLeast(1), height.coerceAtLeast(1), Bitmap.Config.ARGB_8888
         )
-        Canvas(base).drawColor(color)
+        Canvas(base).drawColor(android.graphics.Color.rgb(code, code, code))
         val gmBmp = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
             .also { it.setPixel(0, 0, android.graphics.Color.WHITE) }
         base.setGainmap(Gainmap(gmBmp).apply {
