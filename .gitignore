@@ -1,0 +1,43 @@
+*.iml
+.gradle
+/local.properties
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/deploymentTargetSelector.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+/release.keystore
+/keystore.properties
+# Build outputs
+*.apk
+*.aab
+*.idsig
+*/build/
+/app/build_old/
+/__pycache__/
+/_raw.avif
+# Backup
+/备份-*/
+/色彩测试*/
+/PPS模糊人因/
+# Temp files
+/预置图/
+/p3_icc.bin
+/*.py
+/__pycache__/
+/*.html
+/t.png
+/t.avif
+/_raw.avif
+/hdr_scan_server.py
+/README.md
+/opencode.json
+/RGB响应时间_新方法分析报告.md

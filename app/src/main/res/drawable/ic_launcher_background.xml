@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- dark radial base -->
+    <path android:pathData="M0,0h108v108h-108z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="radial"
+                android:centerX="54"
+                android:centerY="54"
+                android:gradientRadius="76">
+                <item android:offset="0.0" android:color="#FF1A1A1A" />
+                <item android:offset="1.0" android:color="#FF000000" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- faint calibration grid -->
+    <group android:strokeColor="#1AFFFFFF" android:strokeWidth="0.8">
+        <path android:pathData="M18,0L18,108" />
+        <path android:pathData="M36,0L36,108" />
+        <path android:pathData="M54,0L54,108" />
+        <path android:pathData="M72,0L72,108" />
+        <path android:pathData="M90,0L90,108" />
+        <path android:pathData="M0,18L108,18" />
+        <path android:pathData="M0,36L108,36" />
+        <path android:pathData="M0,54L108,54" />
+        <path android:pathData="M0,72L108,72" />
+        <path android:pathData="M0,90L108,90" />
+    </group>
+
+    <!-- inner corner brackets for calibration motif -->
+    <group
+        android:strokeColor="#4DFFFFFF"
+        android:strokeWidth="1.5"
+        android:fillColor="#00000000">
+        <path android:pathData="M30,34 L30,30 L34,30" />
+        <path android:pathData="M74,30 L78,30 L78,34" />
+        <path android:pathData="M30,74 L30,78 L34,78" />
+        <path android:pathData="M74,78 L78,78 L78,74" />
+    </group>
+</vector>
