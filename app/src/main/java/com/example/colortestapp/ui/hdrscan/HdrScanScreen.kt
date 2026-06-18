@@ -30,6 +30,12 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.displayCutout
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.union
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -148,6 +154,7 @@ private fun IdleScreen(viewModel: HdrScanViewModel) {
             .fillMaxSize()
             .background(Color(0xFF1A1A1A))
             .verticalScroll(rememberScrollState())
+            .windowInsetsPadding(WindowInsets.systemBars.union(WindowInsets.displayCutout))
             .padding(horizontal = 28.dp, vertical = 36.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -324,6 +331,7 @@ private fun ScanningScreen(
             Modifier
                 .fillMaxWidth()
                 .background(Color(0xFF1A1A1A))
+                .windowInsetsPadding(WindowInsets.navigationBars.union(WindowInsets.displayCutout))
                 .padding(horizontal = 24.dp, vertical = 22.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -444,6 +452,7 @@ private fun ChartResultScreen(
         Modifier
             .fillMaxSize()
             .background(Color(0xFF1A1A1A))
+            .windowInsetsPadding(WindowInsets.systemBars.union(WindowInsets.displayCutout))
             .padding(16.dp)
     ) {
         // 标题区

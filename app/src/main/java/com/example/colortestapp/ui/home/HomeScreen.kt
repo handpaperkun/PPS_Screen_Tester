@@ -12,15 +12,22 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -47,6 +54,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.colortestapp.navigation.Screen
@@ -64,6 +72,8 @@ import com.example.colortestapp.ui.theme.YellowAccent
 fun HomeScreen(
     onNavigate: (Screen) -> Unit
 ) {
+    val safeAreaInsets = WindowInsets.systemBars.union(WindowInsets.displayCutout)
+    val layoutDirection = LocalLayoutDirection.current
     val features = listOf(
         FeatureItem(
             screen = Screen.SignalReceiver,
@@ -133,16 +143,25 @@ fun HomeScreen(
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surface
-                )
+                ),
+                windowInsets = safeAreaInsets
             )
         },
-        containerColor = MaterialTheme.colorScheme.surface
+        containerColor = MaterialTheme.colorScheme.surface,
+        contentWindowInsets = safeAreaInsets
     ) { paddingValues ->
+        val listPadding = PaddingValues(
+            start = paddingValues.calculateStartPadding(layoutDirection) + 20.dp,
+            top = paddingValues.calculateTopPadding() + 20.dp,
+            end = paddingValues.calculateEndPadding(layoutDirection) + 20.dp,
+            bottom = paddingValues.calculateBottomPadding() + 20.dp
+        )
+
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues),
-            contentPadding = PaddingValues(20.dp),
+                .consumeWindowInsets(paddingValues),
+            contentPadding = listPadding,
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             items(features, key = { it.screen.route }) { feature ->
