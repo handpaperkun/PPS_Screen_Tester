@@ -33,6 +33,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -68,7 +69,7 @@ fun MotionScreen(
             // ── 中心大号指示器 ──
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Box(
-                    Modifier.width(320.dp).clip(RoundedCornerShape(28.dp)).background(Color(0xFF262626))
+                    Modifier.width(320.dp).clip(MaterialTheme.shapes.extraLarge).background(MaterialTheme.colorScheme.surfaceContainerHigh)
                         .padding(horizontal = 36.dp, vertical = 28.dp),
                     contentAlignment = Alignment.Center
                 ) {
@@ -76,14 +77,14 @@ fun MotionScreen(
                         Box(Modifier.height(88.dp), contentAlignment = Alignment.Center) {
                             Text(
                                 if (state.pressing) "高刷" else "60Hz",
-                                color = Color.White, fontSize = 76.sp, fontWeight = FontWeight.Black,
+                                color = MaterialTheme.colorScheme.onSurface, fontSize = 76.sp, fontWeight = FontWeight.Black,
                                 fontFamily = FontFamily.Monospace, lineHeight = 72.sp
                             )
                         }
                         Spacer(Modifier.height(6.dp))
                         Text(
                             String.format("%3d FPS", state.currentFps.toInt()),
-                            color = Color.White.copy(alpha = 0.85f), fontSize = 28.sp,
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.85f), fontSize = 28.sp,
                             fontWeight = FontWeight.Bold, fontFamily = FontFamily.Monospace
                         )
                     }
@@ -111,36 +112,36 @@ fun MotionScreen(
         // 菜单
         Md3BottomSheet(visible = menu, onDismiss = { menu = false }) {
             Column {
-                Text("FPS Flicker", color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                Text("FPS Flicker", color = MaterialTheme.colorScheme.onSurface, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
                 Spacer(Modifier.height(16.dp))
-                Text("背景灰阶", color = Color(0xBBFFFFFF), fontSize = 14.sp)
+                Text("背景灰阶", color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.bodyMedium)
                 Spacer(Modifier.height(8.dp))
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     GRAY_LEVELS.forEachIndexed { i, gv ->
                         val sel = i == grayIdx
                         val gColor = Color((gv shl 16) or (gv shl 8) or gv or (0xFF shl 24))
                         Box(
-                            Modifier.clip(RoundedCornerShape(8.dp)).background(gColor).background(if (sel) Color.White.copy(alpha = 0.3f) else Color.Transparent)
+                            Modifier.clip(MaterialTheme.shapes.small).background(gColor).background(if (sel) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f) else Color.Transparent)
                                 .clickable { grayIdx = i }
                                 .padding(horizontal = 14.dp, vertical = 10.dp),
                             contentAlignment = Alignment.Center
                         ) {
                             Text("G$gv", color = if (gv > 128) Color.Black else Color.White,
-                                fontSize = 13.sp, fontWeight = if (sel) FontWeight.Bold else FontWeight.Normal)
+                                style = MaterialTheme.typography.labelLarge, fontWeight = if (sel) FontWeight.Bold else FontWeight.Normal)
                         }
                     }
                 }
                 Spacer(Modifier.height(12.dp))
-                Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(10.dp)).background(Color.White.copy(alpha = 0.05f))
+                Row(Modifier.fillMaxWidth().clip(MaterialTheme.shapes.medium).background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f))
                     .clickable { showOverlay = !showOverlay }.padding(vertical = 13.dp),
                     horizontalArrangement = Arrangement.Center) {
-                    Text("显示 " + if (showOverlay) "●" else "○", color = Color(0xBBFFFFFF), fontSize = 14.sp)
+                    Text("显示 " + if (showOverlay) "●" else "○", color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.bodyMedium)
                 }
                 Spacer(Modifier.height(8.dp))
                 Button(onClick = { menu = false; onBack() },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray),
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHighest),
                     modifier = Modifier.height(40.dp)
-                ) { Text("返回", color = Color.White, fontSize = 14.sp) }
+                ) { Text("返回", color = MaterialTheme.colorScheme.onSurface, style = MaterialTheme.typography.bodyMedium) }
             }
         }
     }

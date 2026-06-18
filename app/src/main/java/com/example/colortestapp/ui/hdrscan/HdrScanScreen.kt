@@ -152,7 +152,7 @@ private fun IdleScreen(viewModel: HdrScanViewModel) {
     Column(
         Modifier
             .fillMaxSize()
-            .background(Color(0xFF1A1A1A))
+            .background(MaterialTheme.colorScheme.surface)
             .verticalScroll(rememberScrollState())
             .windowInsetsPadding(WindowInsets.systemBars.union(WindowInsets.displayCutout))
             .padding(horizontal = 28.dp, vertical = 36.dp),
@@ -163,13 +163,13 @@ private fun IdleScreen(viewModel: HdrScanViewModel) {
         Box(
             Modifier
                 .size(72.dp)
-                .background(Color(0xFF4CAF50).copy(alpha = 0.15f), shape = MaterialTheme.shapes.extraLarge),
+                .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.15f), shape = MaterialTheme.shapes.extraLarge),
             contentAlignment = Alignment.Center
         ) {
             Text(
                 "☀",
-                fontSize = 36.sp,
-                color = Color(0xFF4CAF50),
+                style = MaterialTheme.typography.displaySmall,
+                color = MaterialTheme.colorScheme.primary,
                 textAlign = TextAlign.Center
             )
         }
@@ -177,14 +177,14 @@ private fun IdleScreen(viewModel: HdrScanViewModel) {
         Text(
             "HDR 倍率扫描",
             style = MaterialTheme.typography.headlineLarge,
-            color = Color.White,
+            color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold
         )
         Spacer(Modifier.height(8.dp))
         Text(
             "自动控制亮度 2% → 100%\n系统 API 读取屏幕 HDR/SDR 倍率\n10% APL · 20步 · 每步1.5s · 延迟5s\n左半4X/4X/4X · 右半1X/2X/3X 增益图",
-            color = Color.Gray,
-            fontSize = 14.sp,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            style = MaterialTheme.typography.bodyMedium,
             textAlign = TextAlign.Center,
             lineHeight = 22.sp
         )
@@ -193,7 +193,7 @@ private fun IdleScreen(viewModel: HdrScanViewModel) {
 
         // 准备提示
         Card(
-            colors = CardDefaults.cardColors(containerColor = Color(0xFF2D2D2D)),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(Modifier.padding(18.dp)) {
@@ -201,22 +201,22 @@ private fun IdleScreen(viewModel: HdrScanViewModel) {
                     Icon(
                         imageVector = Icons.Default.Warning,
                         contentDescription = null,
-                        tint = Color(0xFFFFB300),
+                        tint = MaterialTheme.colorScheme.tertiary,
                         modifier = Modifier.size(22.dp)
                     )
                     Spacer(Modifier.width(10.dp))
                     Text(
                         "测试前准备",
-                        color = Color.White,
-                        fontSize = 15.sp,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.Bold
                     )
                 }
                 Spacer(Modifier.height(10.dp))
                 Text(
                     "请先将手机关闭自动亮度、屏幕亮度调至最低（最好为最低亮度），再进入测试。",
-                    color = Color(0xFFE0E0E0),
-                    fontSize = 14.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = MaterialTheme.typography.bodyMedium,
                     lineHeight = 21.sp
                 )
             }
@@ -236,7 +236,7 @@ private fun IdleScreen(viewModel: HdrScanViewModel) {
         // 开始按钮
         Button(
             onClick = { viewModel.startScan() },
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)),
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
             shape = MaterialTheme.shapes.large,
             modifier = Modifier
                 .fillMaxWidth()
@@ -248,7 +248,7 @@ private fun IdleScreen(viewModel: HdrScanViewModel) {
                 modifier = Modifier.size(22.dp)
             )
             Spacer(Modifier.width(8.dp))
-            Text("开始扫描", fontSize = 18.sp, color = Color.White, fontWeight = FontWeight.Bold)
+            Text("开始扫描", style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.onPrimary, fontWeight = FontWeight.Bold)
         }
     }
 }
@@ -262,15 +262,15 @@ private fun StepItem(number: String, title: String, desc: String) {
         Box(
             modifier = Modifier
                 .size(36.dp)
-                .background(Color(0xFF4CAF50), shape = MaterialTheme.shapes.small),
+                .background(MaterialTheme.colorScheme.primary, shape = MaterialTheme.shapes.small),
             contentAlignment = Alignment.Center
         ) {
-            Text(number, color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+            Text(number, color = MaterialTheme.colorScheme.onPrimary, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
         }
         Spacer(Modifier.width(14.dp))
         Column {
-            Text(title, color = Color.White, fontSize = 15.sp, fontWeight = FontWeight.SemiBold)
-            Text(desc, color = Color.Gray, fontSize = 13.sp)
+            Text(title, color = MaterialTheme.colorScheme.onSurface, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+            Text(desc, color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.labelLarge)
         }
     }
 }
@@ -330,7 +330,7 @@ private fun ScanningScreen(
         Column(
             Modifier
                 .fillMaxWidth()
-                .background(Color(0xFF1A1A1A))
+                .background(MaterialTheme.colorScheme.surface)
                 .windowInsetsPadding(WindowInsets.navigationBars.union(WindowInsets.displayCutout))
                 .padding(horizontal = 24.dp, vertical = 22.dp),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -340,11 +340,11 @@ private fun ScanningScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("扫描进度", color = Color.Gray, fontSize = 13.sp)
+                Text("扫描进度", color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.labelLarge)
                 Text(
                     "${state.currentStep + 1} / ${state.totalSteps}",
-                    color = Color.White,
-                    fontSize = 13.sp,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold
                 )
             }
@@ -354,24 +354,24 @@ private fun ScanningScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(8.dp),
-                color = Color(0xFF4CAF50),
-                trackColor = Color(0xFF333333),
+                color = MaterialTheme.colorScheme.primary,
+                trackColor = MaterialTheme.colorScheme.surfaceContainerHighest,
             )
 
             Spacer(Modifier.height(18.dp))
 
-            Text("当前亮度", color = Color.Gray, fontSize = 12.sp)
+            Text("当前亮度", color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.labelMedium)
             Row(verticalAlignment = Alignment.Bottom) {
                 Text(
                     "${(state.currentBrightness * 100).toInt()}",
-                    color = Color(0xFF4CAF50),
-                    fontSize = 44.sp,
+                    color = MaterialTheme.colorScheme.primary,
+                    style = MaterialTheme.typography.displaySmall,
                     fontWeight = FontWeight.ExtraBold
                 )
                 Text(
                     "%",
-                    color = Color(0xFF4CAF50),
-                    fontSize = 20.sp,
+                    color = MaterialTheme.colorScheme.primary,
+                    style = MaterialTheme.typography.headlineSmall,
                     modifier = Modifier.padding(bottom = 6.dp, start = 3.dp)
                 )
             }
@@ -381,14 +381,14 @@ private fun ScanningScreen(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 CircularProgressIndicator(
                     modifier = Modifier.size(16.dp),
-                    color = Color(0xFF4CAF50),
+                    color = MaterialTheme.colorScheme.primary,
                     strokeWidth = 2.dp
                 )
                 Spacer(Modifier.width(10.dp))
                 Text(
                     "正在采集 HDR/SDR 倍率…",
-                    color = Color.Gray,
-                    fontSize = 13.sp
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = MaterialTheme.typography.labelLarge
                 )
             }
         }
@@ -451,7 +451,7 @@ private fun ChartResultScreen(
     Column(
         Modifier
             .fillMaxSize()
-            .background(Color(0xFF1A1A1A))
+            .background(MaterialTheme.colorScheme.surface)
             .windowInsetsPadding(WindowInsets.systemBars.union(WindowInsets.displayCutout))
             .padding(16.dp)
     ) {
@@ -463,15 +463,15 @@ private fun ChartResultScreen(
             Column(Modifier.weight(1f)) {
                 Text(
                     "HDR 倍率曲线",
-                    color = Color.White,
-                    fontSize = 22.sp,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    style = MaterialTheme.typography.headlineMedium,
                     fontWeight = FontWeight.Bold
                 )
                 Spacer(Modifier.height(2.dp))
                 Text(
                     "系统 API 实测 · 亮度 2% → 100% · 10% APL",
-                    color = Color.Gray,
-                    fontSize = 12.sp
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = MaterialTheme.typography.labelMedium
                 )
             }
         }
@@ -480,7 +480,7 @@ private fun ChartResultScreen(
 
         // 图表卡片
         Card(
-            colors = CardDefaults.cardColors(containerColor = Color(0xFF222222)),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth()
@@ -492,8 +492,8 @@ private fun ChartResultScreen(
             ) {
                 Text(
                     "HDR 倍率 vs 屏幕亮度 (%)",
-                    color = Color.White,
-                    fontSize = 14.sp,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Medium
                 )
                 Spacer(Modifier.height(10.dp))
@@ -509,8 +509,8 @@ private fun ChartResultScreen(
                         yLabels.forEach { lbl ->
                             Text(
                                 lbl,
-                                color = Color.Gray,
-                                fontSize = 10.sp,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                style = MaterialTheme.typography.labelSmall,
                                 modifier = Modifier.align(Alignment.End)
                             )
                         }
@@ -547,13 +547,13 @@ private fun ChartResultScreen(
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             xLabels.forEach { lbl ->
-                                Text(lbl, color = Color.Gray, fontSize = 10.sp)
+                                Text(lbl, color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.labelSmall)
                             }
                         }
                         Text(
                             "屏幕亮度 (%)",
-                            color = Color.Gray,
-                            fontSize = 11.sp,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            style = MaterialTheme.typography.labelSmall,
                             modifier = Modifier
                                 .align(Alignment.CenterHorizontally)
                                 .padding(top = 3.dp)
@@ -572,7 +572,7 @@ private fun ChartResultScreen(
         ) {
             Button(
                 onClick = { onChartAction("retest") },
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                 shape = MaterialTheme.shapes.medium,
                 modifier = Modifier
                     .weight(1f)
@@ -580,7 +580,7 @@ private fun ChartResultScreen(
             ) {
                 Icon(Icons.Default.Refresh, contentDescription = null, modifier = Modifier.size(18.dp))
                 Spacer(Modifier.width(5.dp))
-                Text("重新测试", color = Color.White, fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
+                Text("重新测试", color = MaterialTheme.colorScheme.onPrimary, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
             }
             Button(
                 onClick = {
@@ -588,19 +588,19 @@ private fun ChartResultScreen(
                         saveChartToGallery(context, brightnessPct, ratios, maxRatio)
                     }
                 },
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF2196F3)),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.tertiary),
                 shape = MaterialTheme.shapes.medium,
                 modifier = Modifier
                     .weight(1f)
                     .height(46.dp)
             ) {
-                Text("↓", color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                Text("↓", color = MaterialTheme.colorScheme.onTertiary, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
                 Spacer(Modifier.width(5.dp))
-                Text("保存图", color = Color.White, fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
+                Text("保存图", color = MaterialTheme.colorScheme.onTertiary, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
             }
             Button(
                 onClick = { onChartAction("back") },
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF616161)),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHighest),
                 shape = MaterialTheme.shapes.medium,
                 modifier = Modifier
                     .weight(1f)
@@ -608,7 +608,7 @@ private fun ChartResultScreen(
             ) {
                 Icon(Icons.Default.Home, contentDescription = null, modifier = Modifier.size(18.dp))
                 Spacer(Modifier.width(5.dp))
-                Text("返回主页", color = Color.White, fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
+                Text("返回主页", color = MaterialTheme.colorScheme.onSurface, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
             }
         }
     }

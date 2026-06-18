@@ -43,6 +43,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -138,25 +139,25 @@ fun RgbTestScreen(vm: RgbTestViewModel = viewModel(), onBack: () -> Unit) {
                 RgbTestMode.WIDE_GAMUT -> "左P3 右sRGB"
                 RgbTestMode.RGB_GAINMAP -> if (cmp) "SDR" else "左4X 右1X/2X/3X"
                 RgbTestMode.GRAYSCALE_GRADIENT -> "W/R/G/B 0→30"
-            }, color = Color(0x66FFFFFF), fontSize = 12.sp)
+            }, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f), style = MaterialTheme.typography.labelMedium)
         }
 
         Md3BottomSheet(visible = menu, onDismiss = { menu = false }) {
             Column {
-                Text("RGB 测试", color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                Text("RGB 测试", color = MaterialTheme.colorScheme.onSurface, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
                 Spacer(Modifier.height(16.dp))
                 RgbTestMode.entries.forEach { m ->
                     val sel = m == mode
                     Box(
-                        Modifier.fillMaxWidth().clip(RoundedCornerShape(10.dp))
-                            .background(if (sel) Color(0xFF4CAF50).copy(alpha = 0.18f) else Color.Transparent)
+                        Modifier.fillMaxWidth().clip(MaterialTheme.shapes.medium)
+                            .background(if (sel) MaterialTheme.colorScheme.primary.copy(alpha = 0.18f) else Color.Transparent)
                             .clickable { mode = m; vm.currentMode = m; toggle = false; cmp = false; menu = false }
                             .padding(vertical = 13.dp),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(m.label + if (sel) " ✓" else "",
-                            color = if (sel) Color(0xFF4CAF50) else Color(0xBBFFFFFF),
-                            fontSize = 16.sp, fontWeight = if (sel) FontWeight.Bold else FontWeight.Normal)
+                            color = if (sel) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                            style = MaterialTheme.typography.titleMedium, fontWeight = if (sel) FontWeight.Bold else FontWeight.Normal)
                     }
                 }
                 Spacer(Modifier.height(16.dp))
@@ -178,13 +179,13 @@ fun RgbTestScreen(vm: RgbTestViewModel = viewModel(), onBack: () -> Unit) {
                                 }
                             }
                         }
-                    }, colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF2196F3)),
+                    }, colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                         modifier = Modifier.height(40.dp)
-                    ) { Text("保存", color = Color.White, fontSize = 14.sp) }
+                    ) { Text("保存", color = MaterialTheme.colorScheme.onPrimary, style = MaterialTheme.typography.bodyMedium) }
                     Button(onClick = { menu = false; onBack() },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray),
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHighest),
                         modifier = Modifier.height(40.dp)
-                    ) { Text("返回", color = Color.White, fontSize = 14.sp) }
+                    ) { Text("返回", color = MaterialTheme.colorScheme.onSurface, style = MaterialTheme.typography.bodyMedium) }
                 }
             }
         }
