@@ -236,7 +236,7 @@ private fun FeatureCard(
                         .border(1.5.dp, feature.color.copy(alpha = 0.4f), CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
-                    FeatureIcon(feature = feature, size = 56.dp)
+                    FeatureIcon(feature = feature, size = 36.dp)
                 }
             }
         }
@@ -248,12 +248,11 @@ private fun FeatureIcon(
     feature: FeatureItem,
     size: androidx.compose.ui.unit.Dp
 ) {
-    val iconSize = size * 0.5f
-    androidx.compose.foundation.Canvas(modifier = Modifier.size(iconSize)) {
-        val strokeWidth = size.toPx() * 0.035f
+    androidx.compose.foundation.Canvas(modifier = Modifier.size(size)) {
+        val sz = this.size.minDimension
+        val strokeWidth = sz * 0.035f
         when (feature.screen) {
             Screen.SignalReceiver -> {
-                val sz = size.toPx()
                 val inset = sz * 0.1f
                 drawRect(
                     color = feature.color.copy(alpha = 0.7f),
@@ -278,37 +277,37 @@ private fun FeatureIcon(
 
             Screen.MotionBlur -> {
                 val lineCount = 5
-                val gap = size.toPx() / (lineCount + 1)
+                val gap = sz / (lineCount + 1)
                 repeat(lineCount) { i ->
                     val y = gap * (i + 1)
                     val alpha = if (i == 2) 1f else 0.5f
                     val width = if (i == 2) strokeWidth * 1.4f else strokeWidth
                     drawLine(
                         color = feature.color.copy(alpha = alpha),
-                        start = Offset(size.toPx() * 0.15f, y),
-                        end = Offset(size.toPx() * 0.85f, y),
+                        start = Offset(sz * 0.15f, y),
+                        end = Offset(sz * 0.85f, y),
                         strokeWidth = width
                     )
                 }
             }
 
             Screen.AplTest -> {
-                val inset = size.toPx() * 0.12f
+                val inset = sz * 0.12f
                 drawRect(
                     color = White.copy(alpha = 0.9f),
                     topLeft = Offset(inset, inset),
-                    size = Size(size.toPx() - inset * 2, size.toPx() - inset * 2)
+                    size = Size(sz - inset * 2, sz - inset * 2)
                 )
-                val innerInset = size.toPx() * 0.32f
+                val innerInset = sz * 0.32f
                 drawRect(
                     color = feature.color.copy(alpha = 0.95f),
                     topLeft = Offset(innerInset, innerInset),
-                    size = Size(size.toPx() - innerInset * 2, size.toPx() - innerInset * 2)
+                    size = Size(sz - innerInset * 2, sz - innerInset * 2)
                 )
             }
 
             Screen.Uniformity -> {
-                val inset = size.toPx() * 0.15f
+                val inset = sz * 0.15f
                 drawRect(
                     brush = Brush.linearGradient(
                         listOf(
@@ -317,17 +316,17 @@ private fun FeatureIcon(
                         )
                     ),
                     topLeft = Offset(inset, inset),
-                    size = Size(size.toPx() - inset * 2, size.toPx() - inset * 2)
+                    size = Size(sz - inset * 2, sz - inset * 2)
                 )
             }
 
             Screen.UltraHdrTest -> {
                 val steps = 4
-                val w = size.toPx() * 0.6f / steps
-                val h = size.toPx() * 0.7f
-                val yBase = size.toPx() * 0.15f
+                val w = sz * 0.6f / steps
+                val h = sz * 0.7f
+                val yBase = sz * 0.15f
                 for (i in 0 until steps) {
-                    val x = size.toPx() * 0.2f + w * i
+                    val x = sz * 0.2f + w * i
                     drawRect(
                         color = White.copy(alpha = 0.35f + i * 0.2f),
                         topLeft = Offset(x, yBase),
@@ -337,12 +336,12 @@ private fun FeatureIcon(
             }
 
             Screen.Subpixel -> {
-                val g = size.toPx() / 8f
+                val g = sz / 8f
                 for (row in 0..3) for (col in 0..3) {
                     if ((row + col) % 2 == 0) {
                         drawRect(
                             color = feature.color.copy(alpha = 0.8f),
-                            topLeft = Offset(size.toPx() * 0.2f + col * g, size.toPx() * 0.2f + row * g),
+                            topLeft = Offset(sz * 0.2f + col * g, sz * 0.2f + row * g),
                             size = Size(g - 1f, g - 1f)
                         )
                     }
@@ -350,7 +349,6 @@ private fun FeatureIcon(
             }
 
             Screen.RgbTest -> {
-                val sz = size.toPx()
                 val barH = sz * 0.18f
                 val barW = sz * 0.55f
                 val startX = sz * 0.22f
@@ -371,7 +369,6 @@ private fun FeatureIcon(
             }
 
             Screen.Motion -> {
-                val sz = size.toPx()
                 val inset = sz * 0.15f
                 val pts = listOf(0.7f, 0.4f, 0.8f, 0.3f, 0.9f, 0.2f, 1.0f, 0.35f, 0.85f)
                 for (i in 0 until pts.size - 1) {
@@ -384,7 +381,6 @@ private fun FeatureIcon(
             }
 
             else -> { // Screen.HdrScan
-                val sz = size.toPx()
                 val inset = sz * 0.18f
                 val cw = sz - inset * 2; val ch = sz - inset * 2
                 drawLine(
