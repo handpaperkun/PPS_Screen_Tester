@@ -60,15 +60,9 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.colortestapp.model.ConnectionState
 import com.example.colortestapp.model.SignalData
-import com.example.colortestapp.ui.common.OptionsPanel
+import com.example.colortestapp.ui.common.Md3BottomSheet
 import com.example.colortestapp.ui.theme.BlueAccent
-import com.example.colortestapp.ui.theme.ElevatedSurface
-import com.example.colortestapp.ui.theme.Gray400
-import com.example.colortestapp.ui.theme.Gray600
-import com.example.colortestapp.ui.theme.NearBlack
-import com.example.colortestapp.ui.theme.Outline
 import com.example.colortestapp.ui.theme.RedAccent
-import com.example.colortestapp.ui.theme.White
 import kotlinx.coroutines.delay
 
 @Composable
@@ -115,7 +109,7 @@ fun SignalScreen(
             }
         }
 
-        OptionsPanel(visible = showOptions, onDismiss = { showOptions = false }) {
+        Md3BottomSheet(visible = showOptions, onDismiss = { showOptions = false }) {
             SignalOptionsContent(
                 config = config, connectionState = connectionState,
                 gamut = gamut, showIndicators = showIndicators,
@@ -224,14 +218,14 @@ private fun ConnectionStatusIndicator(state: ConnectionState) {
     val (color, text) = when (state) {
         ConnectionState.CONNECTED -> BlueAccent to "已连接"
         ConnectionState.CONNECTING -> Color(0xFFFFC107) to "连接中..."
-        ConnectionState.DISCONNECTED -> Gray600 to "未连接"
+        ConnectionState.DISCONNECTED -> MaterialTheme.colorScheme.outline to "未连接"
         ConnectionState.ERROR -> RedAccent to "错误"
     }
     Row(verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.background(NearBlack.copy(alpha = 0.8f), RoundedCornerShape(16.dp))
-            .border(1.dp, color.copy(alpha = 0.5f), RoundedCornerShape(16.dp)).padding(horizontal = 12.dp, vertical = 6.dp)
+        modifier = Modifier.background(MaterialTheme.colorScheme.surface.copy(alpha = 0.8f), MaterialTheme.shapes.large)
+            .border(1.dp, color.copy(alpha = 0.5f), MaterialTheme.shapes.large).padding(horizontal = 12.dp, vertical = 6.dp)
     ) { Box(Modifier.size(10.dp).background(color, CircleShape)); Spacer(Modifier.width(8.dp))
-        Text(text, color = White, fontSize = 13.sp, fontWeight = FontWeight.Medium) }
+        Text(text, color = MaterialTheme.colorScheme.onSurface, style = MaterialTheme.typography.labelLarge) }
 }
 
 // ── 选项面板 ──────────────────────────────────────────
@@ -246,41 +240,41 @@ private fun SignalOptionsContent(
 ) {
     val connected = connectionState == ConnectionState.CONNECTED
     Column(Modifier.fillMaxWidth().padding(horizontal = 4.dp)) {
-        Text("画面信号发生器", style = MaterialTheme.typography.titleLarge, color = White, modifier = Modifier.padding(bottom = 4.dp))
-        Text("兼容 CM/CS Resolve XML 协议", style = MaterialTheme.typography.bodySmall, color = Gray400, modifier = Modifier.padding(bottom = 16.dp))
+        Text("画面信号发生器", style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.padding(bottom = 4.dp))
+        Text("兼容 CM/CS Resolve XML 协议", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(bottom = 16.dp))
         OutlinedTextField(value = config.ipAddress, onValueChange = { onConfigChange(config.copy(ipAddress = it)) },
-            label = { Text("服务器IP地址", color = Gray400) }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Uri),
-            shape = RoundedCornerShape(12.dp),
-            colors = OutlinedTextFieldDefaults.colors(focusedTextColor = White, unfocusedTextColor = White,
-                focusedBorderColor = BlueAccent, unfocusedBorderColor = Outline, focusedLabelColor = BlueAccent, unfocusedLabelColor = Gray600),
+            label = { Text("服务器IP地址", color = MaterialTheme.colorScheme.onSurfaceVariant) }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Uri),
+            shape = MaterialTheme.shapes.medium,
+            colors = OutlinedTextFieldDefaults.colors(focusedTextColor = MaterialTheme.colorScheme.onSurface, unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                focusedBorderColor = BlueAccent, unfocusedBorderColor = MaterialTheme.colorScheme.outline, focusedLabelColor = BlueAccent, unfocusedLabelColor = MaterialTheme.colorScheme.outline),
             modifier = Modifier.fillMaxWidth())
         Spacer(Modifier.height(16.dp))
         Text(if (config.hdrEnabled) "色域（HDR 固定 BT.2020）" else "色域",
-            style = MaterialTheme.typography.bodyLarge, color = if (config.hdrEnabled) Gray400 else White, modifier = Modifier.padding(bottom = 8.dp))
+            style = MaterialTheme.typography.bodyLarge, color = if (config.hdrEnabled) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSurface, modifier = Modifier.padding(bottom = 8.dp))
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             listOf("sRGB" to 0, "P3" to 1).forEach { (label, idx) ->
                 Button(onClick = { if (!config.hdrEnabled) onGamutChange(idx) },
-                    colors = ButtonDefaults.buttonColors(containerColor = if (gamut == idx) BlueAccent else ElevatedSurface),
-                    shape = RoundedCornerShape(8.dp), enabled = !config.hdrEnabled, modifier = Modifier.weight(1f)
-                ) { Text(label, fontSize = 13.sp, color = White) }
+                    colors = ButtonDefaults.buttonColors(containerColor = if (gamut == idx) BlueAccent else MaterialTheme.colorScheme.surfaceContainerHigh),
+                    shape = MaterialTheme.shapes.small, enabled = !config.hdrEnabled, modifier = Modifier.weight(1f)
+                ) { Text(label, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurface) }
             }
         }
         Spacer(Modifier.height(12.dp))
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
-            Text("显示状态指示器", style = MaterialTheme.typography.bodyLarge, color = White)
+            Text("显示状态指示器", style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
             Switch(checked = showIndicators, onCheckedChange = onShowIndicatorsChange,
-                colors = SwitchDefaults.colors(checkedThumbColor = White, checkedTrackColor = BlueAccent, uncheckedThumbColor = Gray400, uncheckedTrackColor = Outline))
+                colors = SwitchDefaults.colors(checkedThumbColor = MaterialTheme.colorScheme.onPrimary, checkedTrackColor = BlueAccent, uncheckedThumbColor = MaterialTheme.colorScheme.onSurfaceVariant, uncheckedTrackColor = MaterialTheme.colorScheme.outline))
         }
         Spacer(Modifier.height(6.dp))
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
-            Text("HDR模式", style = MaterialTheme.typography.bodyLarge, color = White)
+            Text("HDR模式", style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
             Switch(checked = config.hdrEnabled, onCheckedChange = { onConfigChange(config.copy(hdrEnabled = it)) },
-                colors = SwitchDefaults.colors(checkedThumbColor = White, checkedTrackColor = BlueAccent, uncheckedThumbColor = Gray400, uncheckedTrackColor = Outline))
+                colors = SwitchDefaults.colors(checkedThumbColor = MaterialTheme.colorScheme.onPrimary, checkedTrackColor = BlueAccent, uncheckedThumbColor = MaterialTheme.colorScheme.onSurfaceVariant, uncheckedTrackColor = MaterialTheme.colorScheme.outline))
         }
         Spacer(Modifier.height(20.dp))
         Button(onClick = { if (connected) onDisconnect() else onConnect() },
-            colors = ButtonDefaults.buttonColors(containerColor = if (connected) RedAccent else BlueAccent, contentColor = White),
-            shape = RoundedCornerShape(16.dp), contentPadding = PaddingValues(vertical = 14.dp), modifier = Modifier.fillMaxWidth()
-        ) { Text(if (connected) "断开连接" else "连接服务器", style = MaterialTheme.typography.labelLarge, fontSize = 16.sp, fontWeight = FontWeight.SemiBold) }
+            colors = ButtonDefaults.buttonColors(containerColor = if (connected) RedAccent else BlueAccent, contentColor = MaterialTheme.colorScheme.onPrimary),
+            shape = MaterialTheme.shapes.large, contentPadding = PaddingValues(vertical = 14.dp), modifier = Modifier.fillMaxWidth()
+        ) { Text(if (connected) "断开连接" else "连接服务器", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold)) }
     }
 }

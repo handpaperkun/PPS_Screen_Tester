@@ -44,12 +44,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.colortestapp.model.FontColorMode
 import com.example.colortestapp.model.MotionBlurConfig
 import com.example.colortestapp.ui.common.OptionButton
-import com.example.colortestapp.ui.common.OptionsPanel
-import com.example.colortestapp.ui.theme.ElevatedSurface
-import com.example.colortestapp.ui.theme.Gray400
+import com.example.colortestapp.ui.common.Md3BottomSheet
 import com.example.colortestapp.ui.theme.GreenAccent
-import com.example.colortestapp.ui.theme.Outline
-import com.example.colortestapp.ui.theme.White
 import kotlinx.coroutines.isActive
 
 @Composable
@@ -73,7 +69,7 @@ fun MotionBlurScreen(
     ) {
         ScrollingTexts(config = config)
 
-        OptionsPanel(
+        Md3BottomSheet(
             visible = showOptions,
             onDismiss = { showOptions = false }
         ) {
@@ -173,7 +169,7 @@ private fun MotionBlurOptionsContent(
         Text(
             text = "拖影测试选项",
             style = MaterialTheme.typography.titleLarge,
-            color = White,
+            color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
@@ -186,7 +182,7 @@ private fun MotionBlurOptionsContent(
                     accent = GreenAccent,
                     modifier = Modifier.weight(1f)
                 ) {
-                    Text("G$gray", fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
+                    Text("G$gray", style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold))
                 }
             }
         }
@@ -204,9 +200,9 @@ private fun MotionBlurOptionsContent(
                 }
                 val (selectedColor, contentColor) = when (mode) {
                     FontColorMode.WHITE -> (Color(0xFFE0E0E0) to Color.Black)
-                    FontColorMode.RED -> (Color.Red to White)
-                    FontColorMode.GREEN -> (Color.Green to White)
-                    FontColorMode.BLUE -> (Color.Blue to White)
+                    FontColorMode.RED -> (Color.Red to MaterialTheme.colorScheme.onSurface)
+                    FontColorMode.GREEN -> (Color.Green to MaterialTheme.colorScheme.onSurface)
+                    FontColorMode.BLUE -> (Color.Blue to MaterialTheme.colorScheme.onSurface)
                 }
                 OptionButton(
                     selected = config.fontColorMode == mode,
@@ -215,7 +211,7 @@ private fun MotionBlurOptionsContent(
                     selectedContentColor = contentColor,
                     modifier = Modifier.weight(1f)
                 ) {
-                    Text(modeLabel, fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
+                    Text(modeLabel, style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold))
                 }
             }
         }
@@ -231,7 +227,7 @@ private fun MotionBlurOptionsContent(
                     accent = GreenAccent,
                     modifier = Modifier.weight(1f)
                 ) {
-                    Text("$speed", fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
+                    Text("$speed", style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold))
                 }
             }
         }
@@ -242,8 +238,8 @@ private fun MotionBlurOptionsContent(
         val factor = with(density) { shortSideDp.dp.toPx() } / 1080f
         Text(
             text = "分辨率倍率: ${"%.2f".format(factor)}×  (基准 1080p)",
-            color = Color.White.copy(alpha = 0.5f),
-            fontSize = 11.sp,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+            style = MaterialTheme.typography.labelSmall,
             modifier = Modifier.padding(top = 6.dp)
         )
     }
@@ -254,7 +250,7 @@ private fun PanelLabel(text: String) {
     Text(
         text = text,
         style = MaterialTheme.typography.bodyLarge,
-        color = Gray400,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
         modifier = Modifier.padding(bottom = 10.dp)
     )
 }

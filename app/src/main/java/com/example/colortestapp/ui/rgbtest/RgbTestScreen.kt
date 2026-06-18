@@ -48,7 +48,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.colortestapp.ui.common.OptionsPanel
+import com.example.colortestapp.ui.common.Md3BottomSheet
 import kotlinx.coroutines.launch
 
 @Composable
@@ -141,7 +141,7 @@ fun RgbTestScreen(vm: RgbTestViewModel = viewModel(), onBack: () -> Unit) {
             }, color = Color(0x66FFFFFF), fontSize = 12.sp)
         }
 
-        OptionsPanel(visible = menu, onDismiss = { menu = false }) {
+        Md3BottomSheet(visible = menu, onDismiss = { menu = false }) {
             Column {
                 Text("RGB 测试", color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.Bold)
                 Spacer(Modifier.height(16.dp))

@@ -53,7 +53,6 @@ import com.example.colortestapp.navigation.Screen
 import com.example.colortestapp.ui.theme.BlueAccent
 import com.example.colortestapp.ui.theme.CyanAccent
 import com.example.colortestapp.ui.theme.GreenAccent
-import com.example.colortestapp.ui.theme.NearBlack
 import com.example.colortestapp.ui.theme.OrangeAccent
 import com.example.colortestapp.ui.theme.PurpleAccent
 import com.example.colortestapp.ui.theme.RedAccent
@@ -129,15 +128,15 @@ fun HomeScreen(
                     Text(
                         text = "穷玩组测试工具箱V1.99",
                         style = MaterialTheme.typography.headlineMedium,
-                        color = White
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = NearBlack
+                    containerColor = MaterialTheme.colorScheme.surface
                 )
             )
         },
-        containerColor = NearBlack
+        containerColor = MaterialTheme.colorScheme.surface
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier
@@ -173,12 +172,13 @@ private fun FeatureCard(
         label = "card_elevation"
     )
     val density = LocalDensity.current
+    val cardShape = MaterialTheme.shapes.extraLarge
 
     val gradient = Brush.linearGradient(
         colors = listOf(
             feature.color.copy(alpha = 0.38f),
             feature.color.copy(alpha = 0.12f),
-            NearBlack.copy(alpha = 0.95f)
+            MaterialTheme.colorScheme.surface.copy(alpha = 0.95f)
         ),
         start = Offset.Zero,
         end = Offset.Infinite
@@ -192,7 +192,7 @@ private fun FeatureCard(
                 scaleX = scale
                 scaleY = scale
                 shadowElevation = with(density) { elevation.dp.toPx() }
-                shape = RoundedCornerShape(20.dp)
+                shape = cardShape
                 clip = true
             }
             .clickable(
@@ -200,7 +200,7 @@ private fun FeatureCard(
                 indication = LocalIndication.current,
                 onClick = onClick
             ),
-        shape = RoundedCornerShape(20.dp),
+        shape = cardShape,
         colors = CardDefaults.cardColors(containerColor = Color.Transparent),
         border = BorderStroke(1.dp, feature.color.copy(alpha = 0.55f)),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
@@ -222,13 +222,13 @@ private fun FeatureCard(
                     Text(
                         text = feature.title,
                         style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                        color = White
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                     Spacer(modifier = Modifier.height(6.dp))
                     Text(
                         text = feature.description,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = White.copy(alpha = 0.78f)
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.78f)
                     )
                 }
 

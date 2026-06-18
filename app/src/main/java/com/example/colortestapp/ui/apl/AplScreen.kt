@@ -51,12 +51,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.colortestapp.model.AplConfig
 import com.example.colortestapp.ui.common.OptionButton
-import com.example.colortestapp.ui.common.OptionsPanel
-import com.example.colortestapp.ui.theme.ElevatedSurface
-import com.example.colortestapp.ui.theme.Gray400
+import com.example.colortestapp.ui.common.Md3BottomSheet
 import com.example.colortestapp.ui.theme.OrangeAccent
-import com.example.colortestapp.ui.theme.Outline
-import com.example.colortestapp.ui.theme.White
 import com.example.colortestapp.ui.theme.YellowAccent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -110,7 +106,7 @@ fun AplScreen(
     ) {
         AplCanvas(aplValue = config.aplValue)
 
-        OptionsPanel(
+        Md3BottomSheet(
             visible = showOptions,
             onDismiss = { showOptions = false }
         ) {
@@ -180,15 +176,14 @@ private fun AplOptionsContent(
         Text(
             text = "APL测试选项",
             style = MaterialTheme.typography.titleLarge,
-            color = White,
+            color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.padding(bottom = 12.dp)
         )
 
         Text(
             text = "当前APL: ${config.aplValue}",
             color = YellowAccent,
-            fontSize = 18.sp,
-            fontWeight = FontWeight.SemiBold,
+            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
             modifier = Modifier.padding(bottom = 14.dp)
         )
 
@@ -204,8 +199,7 @@ private fun AplOptionsContent(
                 ) {
                     Text(
                         text = "$apl",
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.SemiBold
+                        style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold)
                     )
                 }
             }
@@ -217,17 +211,15 @@ private fun AplOptionsContent(
             onClick = onSaveAllScreenshots,
             colors = ButtonDefaults.buttonColors(
                 containerColor = OrangeAccent,
-                contentColor = White
+                contentColor = MaterialTheme.colorScheme.onPrimary
             ),
-            shape = RoundedCornerShape(16.dp),
+            shape = MaterialTheme.shapes.large,
             contentPadding = PaddingValues(vertical = 14.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
                 text = "一键保存全部APL截图",
-                style = MaterialTheme.typography.labelLarge,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.SemiBold
+                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold)
             )
         }
     }

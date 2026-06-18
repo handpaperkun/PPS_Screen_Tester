@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -41,14 +40,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.colortestapp.model.UltraHdrConfig
-import com.example.colortestapp.ui.common.OptionsPanel
+import com.example.colortestapp.ui.common.Md3BottomSheet
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import com.example.colortestapp.ui.theme.ElevatedSurface
-import com.example.colortestapp.ui.theme.Gray400
 import com.example.colortestapp.ui.theme.PurpleAccent
-import com.example.colortestapp.ui.theme.White
 import com.example.colortestapp.ui.theme.YellowAccent
 
 @Composable
@@ -135,7 +131,7 @@ fun UltraHdrScreen(
         }
 
         // 选项面板
-        OptionsPanel(
+        Md3BottomSheet(
             visible = showOptions,
             onDismiss = { showOptions = false }
         ) {
@@ -225,10 +221,10 @@ private fun UltraHdrOptionsContent(
                             containerColor = if (isSelected) {
                                 PurpleAccent
                             } else {
-                                ElevatedSurface
+                                MaterialTheme.colorScheme.surfaceContainerHigh
                             }
                         ),
-                        shape = RoundedCornerShape(10.dp),
+                        shape = MaterialTheme.shapes.medium,
                         modifier = Modifier
                             .weight(1f)
                             .height(40.dp),
@@ -237,7 +233,7 @@ private fun UltraHdrOptionsContent(
                         Text(
                             text = "$idx",
                             style = MaterialTheme.typography.labelMedium,
-                            color = if (isSelected) White else Gray400
+                            color = if (isSelected) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                 }
@@ -254,7 +250,7 @@ private fun UltraHdrOptionsContent(
             Button(
                 onClick = onSave,
                 colors = ButtonDefaults.buttonColors(containerColor = YellowAccent),
-                shape = RoundedCornerShape(10.dp),
+                shape = MaterialTheme.shapes.medium,
                 modifier = Modifier.weight(1f).height(48.dp)
             ) {
                 Text("保存当前", style = MaterialTheme.typography.labelLarge, color = Color.Black)
@@ -262,10 +258,10 @@ private fun UltraHdrOptionsContent(
             Button(
                 onClick = onSaveAll,
                 colors = ButtonDefaults.buttonColors(containerColor = PurpleAccent),
-                shape = RoundedCornerShape(10.dp),
+                shape = MaterialTheme.shapes.medium,
                 modifier = Modifier.weight(1f).height(48.dp)
             ) {
-                Text("保存全部 21 张", style = MaterialTheme.typography.labelLarge, color = White)
+                Text("保存全部 21 张", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurface)
             }
         }
     }

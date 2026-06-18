@@ -38,7 +38,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.colortestapp.ui.common.OptionsPanel
+import com.example.colortestapp.ui.common.Md3BottomSheet
 
 val GRAY_LEVELS = listOf(17, 38, 72, 128, 165)
 
@@ -109,7 +109,7 @@ fun MotionScreen(
         })
 
         // 菜单
-        OptionsPanel(visible = menu, onDismiss = { menu = false }) {
+        Md3BottomSheet(visible = menu, onDismiss = { menu = false }) {
             Column {
                 Text("FPS Flicker", color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.Bold)
                 Spacer(Modifier.height(16.dp))

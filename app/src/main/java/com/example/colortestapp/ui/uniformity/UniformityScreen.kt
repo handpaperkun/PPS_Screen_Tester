@@ -35,12 +35,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.colortestapp.model.UniformityConfig
 import com.example.colortestapp.ui.common.OptionButton
-import com.example.colortestapp.ui.common.OptionsPanel
-import com.example.colortestapp.ui.theme.ElevatedSurface
-import com.example.colortestapp.ui.theme.Gray400
-import com.example.colortestapp.ui.theme.Outline
+import com.example.colortestapp.ui.common.Md3BottomSheet
 import com.example.colortestapp.ui.theme.PurpleAccent
-import com.example.colortestapp.ui.theme.White
 import com.example.colortestapp.ui.theme.YellowAccent
 
 @Composable
@@ -90,7 +86,7 @@ fun UniformityScreen(
                 )
             }
     ) {
-        OptionsPanel(
+        Md3BottomSheet(
             visible = showOptions,
             onDismiss = { showOptions = false }
         ) {
@@ -117,15 +113,14 @@ private fun UniformityOptionsContent(
         Text(
             text = "均匀度测试选项",
             style = MaterialTheme.typography.titleLarge,
-            color = White,
+            color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.padding(bottom = 12.dp)
         )
 
         Text(
             text = "当前灰阶: G${config.grayLevel}",
             color = YellowAccent,
-            fontSize = 18.sp,
-            fontWeight = FontWeight.SemiBold,
+            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
             modifier = Modifier.padding(bottom = 14.dp)
         )
 
@@ -142,8 +137,7 @@ private fun UniformityOptionsContent(
                 ) {
                     Text(
                         text = "G$gray",
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold
+                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
                     )
                 }
             }
